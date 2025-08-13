@@ -18,6 +18,7 @@ import {
   Rocket
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../hooks/useTranslation';
 
 // 3D Particle System Component
 const ParticleSystem = () => {
@@ -120,6 +121,7 @@ const StatsCounter = ({ end, label, suffix = "" }: { end: number; label: string;
 export default function Homepage() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const { t } = useTranslation();
 
   const testimonials = [
     {
@@ -158,45 +160,90 @@ export default function Homepage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 overflow-hidden">
+    <div className="min-h-screen bg-black overflow-hidden relative">
+      {/* Premium Background Images */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black"></div>
+        
+        {/* Rotating Background Images */}
+        <motion.div
+          className="absolute inset-0 opacity-20"
+          animate={{ 
+            backgroundImage: [
+              'url(https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&h=1080&fit=crop&crop=center)',
+              'url(https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1920&h=1080&fit=crop&crop=center)',
+              'url(https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&h=1080&fit=crop&crop=center)',
+              'url(https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&h=1080&fit=crop&crop=center)',
+              'url(https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&h=1080&fit=crop&crop=center)'
+            ]
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        
+        {/* Overlay Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
+      </div>
+
       {/* Particle Background */}
       <ParticleSystem />
       
       {/* Geometric Patterns */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 border border-blue-500 rounded-full animate-spin-slow"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 border border-purple-500 rounded-lg animate-pulse"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 border border-cyan-500 rounded-full animate-ping"></div>
+      <div className="absolute inset-0 opacity-5 z-10">
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-64 h-64 border border-blue-400 rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 right-1/4 w-48 h-48 border border-purple-400 rounded-lg"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.8, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 border border-cyan-400 rounded-full"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
       {/* Hero Section */}
-      <section className="relative z-10 min-h-screen flex items-center justify-center px-4">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="relative z-20 min-h-screen flex items-center justify-center px-6">
+        <div className="max-w-8xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="mb-8"
+            className="mb-12"
           >
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-              className="inline-flex items-center bg-white/10 backdrop-blur-lg border border-white/20 rounded-full px-6 py-3 mb-8"
+              className="inline-flex items-center bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full px-8 py-4 mb-12 shadow-2xl shadow-black/50"
             >
-              <Sparkles className="text-yellow-400 mr-2" size={20} />
-              <span className="text-white font-medium">Ahmad Yasin - Founder & AI Architect</span>
+              <Sparkles className="text-yellow-400 mr-3" size={24} />
+              <span className="text-white font-semibold text-lg">{t('hero.founder')}</span>
             </motion.div>
             
-            <h1 className="text-5xl md:text-8xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                Innovative AI
+            <h1 className="text-6xl md:text-9xl font-black mb-8 leading-tight tracking-tight">
+              <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl">
+                {t('hero.title').split(' ')[0]} {t('hero.title').split(' ')[1]}
               </span>
               <br />
-              <span className="text-white">for the</span>
+              <span className="text-white drop-shadow-2xl">for the</span>
               <br />
               <motion.span
-                className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent"
+                className="bg-gradient-to-r from-green-300 via-blue-400 to-purple-500 bg-clip-text text-transparent drop-shadow-2xl"
                 animate={{
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                 }}
@@ -206,7 +253,7 @@ export default function Homepage() {
                   ease: "linear"
                 }}
               >
-                Next Era
+                {t('hero.title').split(' ')[4]} {t('hero.title').split(' ')[5]}
               </motion.span>
             </h1>
             
@@ -214,11 +261,13 @@ export default function Homepage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1, duration: 0.8 }}
-              className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed"
+              className="text-xl md:text-3xl text-gray-100 max-w-6xl mx-auto mb-16 leading-relaxed font-light drop-shadow-lg"
             >
-              Premium AI solutions powered by cutting-edge technology. From GPT-powered chatbots to computer vision systems, 
-              we democratize AI with <span className="text-blue-400 font-semibold">100% free and open-source</span> solutions 
-              tailored to your location and budget.
+              {t('hero.description').split('100% free and open-source')[0]}
+              <span className="text-blue-300 font-bold bg-blue-500/20 px-3 py-1 rounded-full border border-blue-400/30">
+                100% free and open-source
+              </span>
+              {t('hero.description').split('100% free and open-source')[1]}
             </motion.p>
           </motion.div>
 
@@ -227,44 +276,44 @@ export default function Homepage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.5, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center mb-16"
+            className="flex flex-col sm:flex-row gap-8 justify-center mb-20"
           >
             <Link to="/project-builder">
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(59, 130, 246, 0.5)" }}
+                whileHover={{ scale: 1.08, boxShadow: "0 0 40px rgba(59, 130, 246, 0.6)" }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-2xl overflow-hidden transition-all duration-300"
+                className="group relative px-10 py-5 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-3xl overflow-hidden transition-all duration-300 shadow-2xl shadow-blue-500/25 text-lg"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <span className="relative flex items-center">
-                  Experience the Future
-                  <Rocket className="ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
+                  {t('hero.experienceFuture')}
+                  <Rocket className="ml-3 group-hover:translate-x-2 transition-transform duration-300" size={24} />
                 </span>
               </motion.button>
             </Link>
             
             <Link to="/voice-bot">
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(168, 85, 247, 0.5)" }}
+                whileHover={{ scale: 1.08, boxShadow: "0 0 40px rgba(168, 85, 247, 0.6)" }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative px-8 py-4 bg-white/10 backdrop-blur-lg border-2 border-white/20 text-white font-bold rounded-2xl hover:border-white/40 transition-all duration-300"
+                className="group relative px-10 py-5 bg-white/10 backdrop-blur-2xl border-2 border-white/20 text-white font-bold rounded-3xl hover:border-white/40 transition-all duration-300 shadow-2xl text-lg"
               >
                 <span className="relative flex items-center">
-                  Voice Consultation
-                  <MessageSquare className="ml-2 group-hover:animate-pulse" size={20} />
+                  {t('hero.voiceConsultation')}
+                  <MessageSquare className="ml-3 group-hover:animate-pulse" size={24} />
                 </span>
               </motion.button>
             </Link>
 
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsVideoPlaying(true)}
-              className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-cyan-600 text-white font-bold rounded-2xl transition-all duration-300"
+              className="group relative px-10 py-5 bg-gradient-to-r from-green-500 to-cyan-600 text-white font-bold rounded-3xl transition-all duration-300 shadow-2xl shadow-green-500/25 text-lg"
             >
               <span className="relative flex items-center">
-                Watch Demo
-                <Play className="ml-2 group-hover:scale-110 transition-transform duration-300" size={20} />
+                {t('hero.watchDemo')}
+                <Play className="ml-3 group-hover:scale-110 transition-transform duration-300" size={24} />
               </span>
             </motion.button>
           </motion.div>
@@ -274,46 +323,58 @@ export default function Homepage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 2, duration: 0.8 }}
-            className="flex flex-wrap justify-center items-center gap-8 text-gray-400"
+            className="flex flex-wrap justify-center items-center gap-12 text-gray-200"
           >
-            <div className="flex items-center">
-              <Shield className="text-green-400 mr-2" size={20} />
-              <span>100% Open Source</span>
-            </div>
-            <div className="flex items-center">
-              <Globe className="text-blue-400 mr-2" size={20} />
-              <span>Global Pricing</span>
-            </div>
-            <div className="flex items-center">
-              <Award className="text-purple-400 mr-2" size={20} />
-              <span>Expert Team</span>
-            </div>
-            <div className="flex items-center">
-              <Zap className="text-yellow-400 mr-2" size={20} />
-              <span>Fast Deployment</span>
-            </div>
+            <motion.div 
+              className="flex items-center bg-white/5 backdrop-blur-lg px-6 py-3 rounded-2xl border border-white/10"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+            >
+              <Shield className="text-green-400 mr-3" size={24} />
+              <span className="font-semibold">{t('trust.openSource')}</span>
+            </motion.div>
+            <motion.div 
+              className="flex items-center bg-white/5 backdrop-blur-lg px-6 py-3 rounded-2xl border border-white/10"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+            >
+              <Globe className="text-blue-400 mr-3" size={24} />
+              <span className="font-semibold">{t('trust.globalPricing')}</span>
+            </motion.div>
+            <motion.div 
+              className="flex items-center bg-white/5 backdrop-blur-lg px-6 py-3 rounded-2xl border border-white/10"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+            >
+              <Award className="text-purple-400 mr-3" size={24} />
+              <span className="font-semibold">{t('trust.expertTeam')}</span>
+            </motion.div>
+            <motion.div 
+              className="flex items-center bg-white/5 backdrop-blur-lg px-6 py-3 rounded-2xl border border-white/10"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+            >
+              <Zap className="text-yellow-400 mr-3" size={24} />
+              <span className="font-semibold">{t('trust.fastDeployment')}</span>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* Floating AI Models Section */}
-      <section className="relative z-10 py-20 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative z-20 py-32 px-6 bg-gradient-to-b from-transparent via-black/50 to-transparent">
+        <div className="max-w-8xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-6">
+            <h2 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-8 tracking-tight">
               AI Technologies We Master
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-2xl text-gray-100 max-w-4xl mx-auto font-light">
               Cutting-edge AI models and frameworks, all using free and open-source solutions
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             <AIModelCard
               icon={<Brain />}
               title="Gemini Pro"
@@ -347,15 +408,15 @@ export default function Homepage() {
       </section>
 
       {/* Stats Section */}
-      <section className="relative z-10 py-20 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative z-20 py-32 px-6">
+        <div className="max-w-8xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-12"
+            className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-16 shadow-2xl"
           >
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
               <StatsCounter end={500} label="Projects Completed" suffix="+" />
               <StatsCounter end={98} label="Client Satisfaction" suffix="%" />
               <StatsCounter end={40} label="Countries Served" suffix="+" />
@@ -366,23 +427,23 @@ export default function Homepage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="relative z-10 py-20 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative z-20 py-32 px-6 bg-gradient-to-b from-transparent via-black/30 to-transparent">
+        <div className="max-w-8xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-6">
+            <h2 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-8 tracking-tight">
               What Clients Say
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-2xl text-gray-100 max-w-4xl mx-auto font-light">
               Real results from real businesses using our AI solutions
             </p>
           </motion.div>
 
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentTestimonial}
@@ -390,15 +451,15 @@ export default function Homepage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
                 transition={{ duration: 0.5 }}
-                className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 text-center"
+                className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-12 text-center shadow-2xl"
               >
-                <div className="flex justify-center mb-4">
+                <div className="flex justify-center mb-6">
                   {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                    <Star key={i} className="text-yellow-400 fill-current" size={20} />
+                    <Star key={i} className="text-yellow-400 fill-current" size={28} />
                   ))}
                 </div>
                 
-                <blockquote className="text-xl text-gray-300 mb-6 italic">
+                <blockquote className="text-2xl text-gray-100 mb-8 italic font-light leading-relaxed">
                   "{testimonials[currentTestimonial].content}"
                 </blockquote>
                 
@@ -406,23 +467,23 @@ export default function Homepage() {
                   <img
                     src={testimonials[currentTestimonial].image}
                     alt={testimonials[currentTestimonial].name}
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-16 h-16 rounded-full mr-6 border-2 border-white/20"
                   />
                   <div className="text-left">
-                    <div className="text-white font-semibold">{testimonials[currentTestimonial].name}</div>
-                    <div className="text-gray-400 text-sm">{testimonials[currentTestimonial].role}</div>
+                    <div className="text-white font-bold text-lg">{testimonials[currentTestimonial].name}</div>
+                    <div className="text-gray-300">{testimonials[currentTestimonial].role}</div>
                   </div>
                 </div>
               </motion.div>
             </AnimatePresence>
 
-            <div className="flex justify-center mt-8 space-x-2">
+            <div className="flex justify-center mt-10 space-x-3">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial ? 'bg-blue-400' : 'bg-gray-600'
+                  className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                    index === currentTestimonial ? 'bg-blue-400 scale-125' : 'bg-gray-500 hover:bg-gray-400'
                   }`}
                 />
               ))}
@@ -432,27 +493,27 @@ export default function Homepage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-10 py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="relative z-20 py-32 px-6">
+        <div className="max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-xl border border-white/20 rounded-3xl p-12"
+            className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-2xl border border-white/20 rounded-3xl p-16 shadow-2xl"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-5xl md:text-6xl font-black text-white mb-8 tracking-tight">
               Ready to Transform Your Business?
             </h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-2xl text-gray-100 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
               Join hundreds of companies already using our AI solutions. Get started with a free consultation and personalized quote.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link to="/project-builder">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg"
+                  className="px-10 py-5 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-2xl shadow-blue-500/25 text-lg"
                 >
                   Start Your AI Project
                 </motion.button>
@@ -460,9 +521,9 @@ export default function Homepage() {
               
               <Link to="/contact">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-white/10 backdrop-blur-lg border border-white/20 text-white font-bold rounded-xl hover:border-white/40 transition-all duration-300"
+                  className="px-10 py-5 bg-white/10 backdrop-blur-2xl border border-white/20 text-white font-bold rounded-2xl hover:border-white/40 transition-all duration-300 shadow-2xl text-lg"
                 >
                   Get Free Consultation
                 </motion.button>
@@ -489,16 +550,16 @@ export default function Homepage() {
               className="relative max-w-4xl w-full mx-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+              <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl">
                 <div className="text-center text-white">
-                  <Play size={64} className="mx-auto mb-4" />
-                  <p className="text-xl">Demo Video Coming Soon</p>
-                  <p className="text-gray-300">Watch our AI solutions in action</p>
+                  <Play size={80} className="mx-auto mb-6" />
+                  <p className="text-2xl font-bold">Demo Video Coming Soon</p>
+                  <p className="text-gray-200 text-lg">Watch our AI solutions in action</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsVideoPlaying(false)}
-                className="absolute -top-4 -right-4 w-8 h-8 bg-white/20 backdrop-blur-lg rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                className="absolute -top-6 -right-6 w-12 h-12 bg-white/20 backdrop-blur-lg rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors text-xl font-bold"
               >
                 ×
               </button>
